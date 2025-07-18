@@ -1,0 +1,505 @@
+{
+  "name": "AI Automation Shorts",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-shorts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -384
+      ],
+      "id": "947908bc-8ca0-4a49-94fe-33a73d3ebb64",
+      "name": "Webhook",
+      "webhookId": "5019336c-0290-4c2c-8723-2e76f7187a9f"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        -160
+      ],
+      "id": "621755b6-f8c5-4f67-b4cd-e15f7cd3c27f",
+      "name": "Wait",
+      "webhookId": "27d754ff-6862-482a-bbd7-8cacd5701b3b"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "52441b97-0eb8-4eff-a05d-7bdc69d0a877",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "ready",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        -160
+      ],
+      "id": "01045ce4-467e-4622-b22a-ec4cfd1afb07",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.klap.app/v2/tasks/{{ $('Analyze Video').item.json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "kak_9jGZfoCe3l74Wrs4W94TtZZG"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        128,
+        -160
+      ],
+      "id": "aacbbdfe-27ac-44cd-9525-04e3f8030034",
+      "name": "Check Status of Analyzing Video"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.klap.app/v2/tasks/video-to-shorts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "kak_9jGZfoCe3l74Wrs4W94TtZZG\t"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source_video_url\": \"{{ $json.body.video_url }}\",\n  \"language\": \"en\",\n  \"target_clip_count\": 2,\n  \"max_clip_count\": 2,\n  \"editing_options\": {\n    \"captions\": true,\n    \"reframe\": true,\n    \"emojis\": true,\n    \"remove_silences\": true,\n    \"intro_title\": false\n  },\n  \"min_duration\": 15,\n  \"max_duration\": 60,\n  \"target_duration\": 30\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        -384
+      ],
+      "id": "7f494dc5-655c-4835-beb7-95fbe30fb227",
+      "name": "Analyze Video"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.klap.app/v2/projects/{{ $json.output_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "kak_9jGZfoCe3l74Wrs4W94TtZZG"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        -112
+      ],
+      "id": "f83866f4-23f3-4aef-a3f5-c15394886c09",
+      "name": "Get Shorts Ideas"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.klap.app/v2/projects/{{ $('If').item.json.output_id }}/{{ $json.id }}/exports",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "kak_9jGZfoCe3l74Wrs4W94TtZZG"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        656,
+        -112
+      ],
+      "id": "6d0fd9d5-37c5-471c-b437-61e244d79738",
+      "name": "Create High Resolution Short"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.klap.app/v2/projects/{{ $('If').item.json.output_id }}/{{ $('Get Shorts Ideas').item.json.id }}/exports/{{ $json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "kak_9jGZfoCe3l74Wrs4W94TtZZG"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        992,
+        -16
+      ],
+      "id": "9b5b788a-547b-4472-b1dc-306e98858ced",
+      "name": "Get High Resolution Short"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cffc771c-13b8-4341-887d-14408fde8497",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "ready",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1136,
+        -16
+      ],
+      "id": "b7575f7f-cb29-4902-ab5c-87c31e836d68",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        -16
+      ],
+      "id": "89643aa5-77be-4437-8650-f74a2ba13877",
+      "name": "Wait1",
+      "webhookId": "acbf6a3a-347c-4617-b699-40358ec39740"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Read or initialize the persistent counter in global static data\nconst staticData = $getWorkflowStaticData('global');\nif (staticData.counter === undefined) {\n  staticData.counter = 0;\n}\n\n// 2. Read all incoming items\nconst items = $input.all();\n\n// 3. Iterate over each item, bump counter, wrap 1–4, and compute scheduledTime\nconst results = items.map(item => {\n  // Increment and wrap back to 1 after 4\n  staticData.counter += 1;\n  if (staticData.counter > 4) {\n    staticData.counter = 1;\n  }\n\n  // Parse finished_at or use current date\n  const raw = item.json.finished_at;\n  const baseDate = raw ? new Date(raw) : new Date();\n  if (isNaN(baseDate.getTime())) {\n    throw new Error(`Invalid date \"${raw}\" on item`);\n  }\n\n  // Add days based on the counter (1–4)\n  baseDate.setDate(baseDate.getDate() + staticData.counter);\n\n  return {\n    json: {\n      scheduledTime: baseDate.toISOString(),\n      counter: staticData.counter,\n    },\n  };\n});\n\n// 4. Return array of { json: { … } } items\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        224
+      ],
+      "id": "e16c9adf-9b07-4aa5-a558-ee2812c7fda6",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{ $('If1').item.json.name }}",
+        "regionCode": "CA",
+        "categoryId": "22",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        352,
+        224
+      ],
+      "id": "238ec735-dc3c-4b0c-9455-5a404a48143a",
+      "name": "Upload a video",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "4CL2db52K4mX0WQg",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Get High Resolution Short').item.json.src_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        144,
+        224
+      ],
+      "id": "e86d630d-7ace-464f-919b-54ce37367854",
+      "name": "Make the Video Downloadable"
+    }
+  ],
+  "pinData": {
+    "Check Status of Analyzing Video": [
+      {
+        "json": {
+          "id": "0Us5TwGpnCdeIjOJ",
+          "type": "video-to-shorts",
+          "status": "ready",
+          "error_code": null,
+          "created_at": "2025-07-17T05:45:42.883Z",
+          "output_type": "folder",
+          "output_id": "8zgzOTWh"
+        }
+      }
+    ],
+    "Analyze Video": [
+      {
+        "json": {
+          "id": "0Us5TwGpnCdeIjOJ",
+          "type": "video-to-shorts",
+          "status": "processing",
+          "error_code": null,
+          "created_at": "2025-07-17T05:45:42.883Z",
+          "output_type": "folder",
+          "output_id": "8zgzOTWh"
+        }
+      }
+    ],
+    "Create High Resolution Short": [
+      {
+        "json": {
+          "id": "edbca119-9027-478d-9355-095f20a4e237",
+          "status": "processing",
+          "src_url": null,
+          "estimated_ready_at": "2025-07-17T06:08:27.734Z",
+          "project_id": "toUJUK0XCVHD",
+          "created_at": "2025-07-17T06:07:31.734Z",
+          "name": "Creative car customization ideas",
+          "author_id": "06a7921a-9b3b-4756-bb26-66a46689f92b",
+          "folder_id": "8zgzOTWh",
+          "descriptions": null
+        }
+      },
+      {
+        "json": {
+          "id": "5312c14a-92ca-4233-b8dd-a0285cd445f4",
+          "status": "processing",
+          "src_url": null,
+          "estimated_ready_at": "2025-07-17T06:08:27.798Z",
+          "project_id": "kNqD9dwXyZeQ",
+          "created_at": "2025-07-17T06:07:31.798Z",
+          "name": "Unveiling a Custom Car Wrap: The Transformation Journey",
+          "author_id": "06a7921a-9b3b-4756-bb26-66a46689f92b",
+          "folder_id": "8zgzOTWh",
+          "descriptions": null
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Analyze Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check Status of Analyzing Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get Shorts Ideas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status of Analyzing Video": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Video": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Shorts Ideas": {
+      "main": [
+        [
+          {
+            "node": "Create High Resolution Short",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create High Resolution Short": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get High Resolution Short": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Get High Resolution Short",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Make the Video Downloadable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Make the Video Downloadable": {
+      "main": [
+        [
+          {
+            "node": "Upload a video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "32b2d80a-4be3-4c43-81d9-8f252e351f7a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "55d4eb6b80ed6bad2cbb1e86bb80b31736760d2580459bfaaa9c7ea49ab4b27c"
+  },
+  "id": "PKTF6sGj9LnvMaxV",
+  "tags": []
+}
