@@ -1,0 +1,86 @@
+Tasks:
+- Learn more about PG 
+- See how regress works and how it could eb applied/adjusted for their build
+
+
+
+lscpci
+netstat -p
+lsof -PID
+pstack myspqld pid
+
+
+- reply to zangqi
+- commit the new changes and ref to the line diff
+- @ in the chat to review comments
+- make a test for issues #72 where we set it 20gb and try running a query and see how the fallocate fails
+- look into changing the system settings for huge_pages so other env can have it
+
+
+++++++++++++++
+#### Asser
+
+**This week:**
+
+
+**Next week:**  
+
+++++++++++++++
+
+Did you have to communicate results to your team in standups or reports?
+- yes i had weekly status meeting where i would go over what i did in the week and then go over the results i gatehreed and some bugs i hit or fixed and ask questions or collabrete to find a new attack plan
+
+Did you ever explain technical findings (bugs, testing results) to non-specialists?
+Yes i had to train new interns and as the have no background i this project i had to go over everything and eplxain in detail and try to go over the basics so that the founcdation is some what solid
+
+Did you learn to ask for help / feedback effectively?
+As time went on i developed a professinla understand of how/when/where to ask questiosn and make sure not to take too much time or ask to many to seem liek a a hindrance. I was always ask if something can be impotved or changed to better fit the tea/ professional enviroment
+
+Did teamwork help you solve bugs or optimize faster?
+yes during hte status meeting or random meeting we would jump into them and pinpoint where is the issue and what can be used to find more info about, like different performance counters or specific tests or using thirdy party software
+
+If you give me 2–3 real scenarios (even small ones), I’ll make the reflection feel personal and authentic — not generic.
+- i stayed with my team during a week for long nights to try to solve a major bug that we could not figure out why its was effecting perf so mauch and after some days i found a paper that talked about a similiar obstavcle they had and with they team we had a patch ti fix it
+- i trained new interns to set up everything 
+
+AI:-----------------------------------------------------------
+
+basic of transformers
+complexity of transformer On^2
+  - Learn from Cohere vids
+  - Hands on LLM book
+  - huggingface course
+understand issue of long context
+parallelism
+- data parallelism: defintions 
+- tensor parallelism
+- pipieline parallelism
+
+pytorch
+training loop
+basic backprog how and coding basics, dl/dw , w=w-a
+define a simple network
+ask chatgpt make a backprog on a single variable
+know how in general backprog is done 
+defining model in pytorch
+
+Books group query attention qkc caching
+   - Learn from Cohere vids
+
+Intro to LLM chap 11 and 12
+
+Q about BIRD model and its training CodeLM and MaskLM
+
+integrating AI/ML with Data Engine to find these bottlenecks
+
+-----------------------------------------------------
+
+
+Books:
+- Glass Sword
+- Kite Runner
+- Lord of the Flies
+- How to kill a mockingbird
+-
+
+
